@@ -2,11 +2,17 @@ const connToMongo = require("./conn");
 const { port } = require("./config");
 const express = require("express");
 var cors = require("cors");
+const mongoose = require('mongoose');
 const app = express();
 connToMongo();
 
 // to use request.body
 app.use(express.json());
+
+mongoose.connect(process.env.MOONGODB_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 //Available routes
 app.use("/api/auth", cors(), require("./src/routes/auth"));
