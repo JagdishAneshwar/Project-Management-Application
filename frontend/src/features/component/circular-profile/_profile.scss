@@ -1,0 +1,25 @@
+@use "../../../variables" as *;
+
+
+    .profile-layout{
+        width: 100%;
+        height: 100%;
+        .circular-layout{
+            width: 100%;
+            height: 100%;
+            margin: 0 auto;
+            padding-top: 20px;
+            .profile-pic{
+                width: 100%;
+                height: 100%;
+                display: block;
+                object-fit: cover;
+                border: 1px solid lightgray;
+            }
+        }
+
+    }
+
+
+
+

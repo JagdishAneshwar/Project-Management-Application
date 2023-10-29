@@ -1,0 +1,32 @@
+@use "../../variables" as *;
+
+.login-section{
+    height: 100vh;
+    color: $light;
+    background-color: #fff;
+    font-size: $heading3;
+    .login-container{
+        overflow: hidden;
+        background-color: $primary;
+        border-radius: 14px;
+        width: 60%;
+        height: 60%;
+        position: relative;
+        margin: 0 auto;
+        margin-top: 10%;
+        .login-img {
+            width: 40%;
+            object-position: 0 -80px;
+        }
+        .login{
+            padding: 2rem;
+            .auth{
+                margin-bottom: 6%;
+            }
+            .login-title{
+                border-bottom: 1px solid white;
+                padding-bottom: 3px;
+            }
+        }
+    }
+}

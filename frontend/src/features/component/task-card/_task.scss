@@ -1,0 +1,32 @@
+@use "../../../variables" as * ;
+
+
+.task-card{
+    background-color: $light;
+    width: 100%;
+    height: auto;
+    color: black;
+    padding: 5px;
+    padding-left: 8px;
+    padding-top: 10px;
+    border-radius: 8px;
+    .task-info{
+        width: 100%;
+        height: 100%;
+        padding-left: 3px;
+        .task-header{
+            font-size: $description;
+        }
+        .task-value{
+            font-size: $description;
+        }
+    }
+    .task-footer {
+        font-size: $small;
+        border-top: 1px solid $grey;
+        margin-top: 3px;
+    }
+}
+
+
+

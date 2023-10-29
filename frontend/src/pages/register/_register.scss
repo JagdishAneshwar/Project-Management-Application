@@ -1,0 +1,31 @@
+@use "../../variables" as *;
+
+.register-section{
+    height: 100vh;
+    color: $light;
+    background-color: #fff;
+    .register-container{
+        overflow: hidden;
+        background-color: $primary;
+        border-radius: 14px;
+        width: 60%;
+        height: 60%;
+        position: relative;
+        margin: 0 auto;
+        margin-top: 10%;
+        .register-img {
+            width: 40%;
+            object-position: 0 -80px;
+        }
+        .register{
+            padding: 2rem;
+            .auth{
+                margin-bottom: 6%;
+            }
+            .register-title{
+                border-bottom: 1px solid white;
+                padding-bottom: 3px;
+            }
+        }
+    }
+}

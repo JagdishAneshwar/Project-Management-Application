@@ -1,0 +1,41 @@
+@use "../../../variables" as *;
+
+.projects{
+    color: $light;
+    width: 100%;
+    height: 100vh;
+    padding: 7px;
+    .task-modal {
+      color: #000;
+    }
+  .all-project-lists{
+    color: black;
+    display: flex;
+    flex-wrap: wrap;
+    .project-card-overview{
+        height:360px;
+        margin-bottom: 40px;
+        overflow: hidden !important;
+        text-overflow: ellipsis;
+        .project-overview{
+            height: 100%;
+            background-color: #fff;
+            .project-card-img{
+                height: 50%;
+                object-fit: cover;
+            }
+
+              padding-bottom: 17px;
+            
+        }
+        .create-project-button{
+          width: 100%;
+        }
+    }
+  }
+
+  .add-project-button{
+    height: 100%;
+    background-color: hsl(0, 0%, 90%);
+  }
+}
