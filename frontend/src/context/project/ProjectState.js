@@ -6,12 +6,12 @@ const ProjectState = (props) => {
   const notesInitial2 = [];
   const [projects, setproject] = useState(notesInitial);
   const [tasks, settask] = useState(notesInitial2);
-  const host = "http://localhost:5000";
+  const host = "https://project-management-application-ch9v.onrender.com/";
 
   const getProject = async () => {
     // API calls
     const response = await fetch(
-      "http://localhost:5000/api/project/allProjectDetails",
+      `${host}/api/project/allProjectDetails`,
       {
         method: "GET",
         headers: {

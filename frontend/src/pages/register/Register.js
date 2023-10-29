@@ -20,7 +20,7 @@ const Signup = () => {
 
     const onClickSignUp = async (e) => {
       e.preventDefault();
-      const res = await fetch("http://localhost:5000/api/auth/createuser", {
+      const res = await fetch("https://project-management-application-ch9v.onrender.com/api/auth/createuser", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password, passwordConfirmation }),
