@@ -1,15 +1,16 @@
 @use "../../variables" as *;
 
 .register-section{
+    width: 100%;
     height: 100vh;
     color: $light;
-    background-color: #fff;
+    font-size: $heading3;
     .register-container{
         overflow: hidden;
         background-color: $primary;
         border-radius: 14px;
         width: 60%;
-        height: 60%;
+        height: 70%;
         position: relative;
         margin: 0 auto;
         margin-top: 10%;

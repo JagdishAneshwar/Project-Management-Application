@@ -10,7 +10,7 @@ const DrawDoughnut = ({title, align, position,titpos, titalgn, label1, info1}) =
     label.splice(i, 0, label1[i]);
     info.splice(i, 0, info1[i]);
   }
-  console.log(label)
+  
   const data = {
     labels: label,
     datasets: [

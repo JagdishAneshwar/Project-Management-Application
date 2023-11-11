@@ -80,8 +80,8 @@ router.put("/updateProject/:id", fetchuser, async (req, res) => {
 router.post("/addProject", async (req, res) => {
   const {
     title, 
-    description, 
-    budget, 
+    description,
+    budget,
     spent, 
     start_date, 
     due_date, 

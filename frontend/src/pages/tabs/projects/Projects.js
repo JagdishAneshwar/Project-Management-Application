@@ -10,7 +10,7 @@ const Projects = () => {
 
   useEffect(() => {
     getProject()
-  });
+  },[]);
   const ref = useRef(null);
   const refClose = useRef(null);
 
@@ -182,7 +182,7 @@ const Projects = () => {
       <h4>Projects</h4>
      <div class="all-project-lists row row-cols-md-3">
         { projects && projects.map((project) => {
-          return (<ProjectOverview project={project} /> );
+          return (<ProjectOverview key={project._id} project={project} /> );
         })
       }
       <div class=" project-card-overview">

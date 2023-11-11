@@ -13,7 +13,7 @@ const Home = () => {
   useEffect(() => {
     getTasks()
     getProject()
-  });
+  },[]);
 
   const project_len = projects.length;
 

@@ -11,7 +11,6 @@ const ProjectOverview = ({project}) => {
     deleteProject(project._id)
     };
 
-    console.log(project)
 
   return ( 
     <div 

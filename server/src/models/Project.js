@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-// total of 11 field
+// total of 11 fields
 
 const projectSchema = new Schema({
   title: {
@@ -40,16 +40,19 @@ const projectSchema = new Schema({
     type: String,
     required: true,
   },
-  members:[ {
-    type : Array , "default" : [] 
-  }],
+  members: [
+    {
+      type: Array,
+      default: [],
+    },
+  ],
   start_date: {
-    type: String
+    type: String,
   },
   due_date: {
     type: String,
     required: true,
   },
-});
+}, { collection: 'pmprojects' }); 
 
 module.exports = mongoose.model("project", projectSchema);

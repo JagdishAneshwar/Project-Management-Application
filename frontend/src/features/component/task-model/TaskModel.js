@@ -1,21 +1,58 @@
-import React, {useState} from 'react'
+import React, {useState, useRef, useEffect, useContext} from 'react'
 import "./_taskmodel.scss"
-import {Multiselect} from 'multiselect-react-dropdown'
+import projectContext from '../../../context/project/projectContext'
+import Select from 'react-select'
 
 
-const TaskModel = () => {
+const TaskModel = ({id}) => {
+  const context = useContext(projectContext);
+  const { tasks, createTask, getTasks } = context;
 
-    const data = [
-        {Name: 'Jagdish', id:1},
-        {Name: 'Venkatesh', id:2},
-        {Name: 'Shivraj', id:3},
-        {Name: 'Nil', id:4}
+      const data = [
+        {
+          value: 1,
+          label: "Jagdish"
+        },
+        {
+          value: 2, 
+          label: 'Venkatesh'
+        },
+        {value:3, label: 'Shivraj'},
+        {value:4, label: 'Nil'}
     ]
 
-    const [options] = useState(data)
+    const [task, settask] = useState({
+      title: "",
+      description:"",
+      spent: "",
+      status: "",
+      project_id:id,
+      priority:"",
+      assigned:"",
+      start_date:"",
+      due_date:""
+  })
+
+    const ref = useRef(null);
+    const refClose = useRef(null);
+    const [selectedValue, setSelectedValue] = useState([]);
+    const handleChange = (e) => {
+      setSelectedValue(Array.isArray(e) ? e.map(x => x.value) : []);
+    }
+  
+    const onChange = (e) => {
+        settask({ ...task, [e.target.name]: e.target.value });
+      };
+    const onClickCreateTask = (e) => {
+      ref.current.click();
+      console.log(task)
+      createTask(task.title, task.description, task.spent, task.start_date, task.status, {assigned:selectedValue}, task.priority, task.project_id, task.due_date);
+    };
+
 
   return (
 <div class="task-modal" tabindex="-1">
+<div class="task-modal modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header border-0">
@@ -29,12 +66,12 @@ const TaskModel = () => {
               Title
             </label>
             <input
-              type="email"
+              type="text"
               className="form-control"
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
-              name="email"
-
+              name="title"
+              onChange={onChange}
             />
           </div>
           <div className="mb-3">
@@ -44,8 +81,8 @@ const TaskModel = () => {
             <input
               type="text"
               className="form-control"
-              name="password"
-
+              name="description"
+              onChange={onChange}
             />
           </div>
           <div className="mb-3">
@@ -55,8 +92,8 @@ const TaskModel = () => {
             <input
               type="text"
               className="form-control"
-              name="password"
-
+              name="spent"
+              onChange={onChange}
             />
           </div>
           <div className="mb-3">
@@ -64,10 +101,21 @@ const TaskModel = () => {
               Assigned Date
             </label>
             <input
+              type="date"
+              className="form-control"
+              name="start_date"
+              onChange={onChange}
+            />
+          </div>
+          <div className="mb-3">
+          <label htmlFor="exampleInputPassword1" className="form-label">
+              Status
+            </label>
+            <input
               type="text"
               className="form-control"
-              name="password"
-
+              name="status"
+              onChange={onChange}
             />
           </div>
           <div className="mb-3">
@@ -75,10 +123,10 @@ const TaskModel = () => {
               Due Date
             </label>
             <input
-              type="text"
+              type="date"
               className="form-control"
-              name="password"
-
+              name="due_date"
+              onChange={onChange}
             />
           </div>
           <div className="mb-3">
@@ -88,38 +136,33 @@ const TaskModel = () => {
             <input
               type="text"
               className="form-control"
-              name="password"
-
+              name="priority"
+              onChange={onChange}
             />
           </div>
           <div className="mb-3">
             <label htmlFor="exampleInputPassword1" className="form-label">
               Assign to
             </label>
-            <Multiselect className='multi' options={options} displayValue="Name" placeholder="" avoidHighlightFirstOption='true' style={{
-    chips: {
-      background: 'red'
-      
-    },
-    option: {
-        color: 'hsl(235, 33%, 27%)'
-      },
-      
-    searchBox: {
-      border: 'none',
-      'border-bottom': '1px solid white',
-      'border-radius': '0px'
-    },
-  }} />
+            <Select className='dropdown text-dark'
+            value={data.filter(obj => selectedValue.includes(obj.value))}
+            options={data}
+            onChange={handleChange}  
+            isMulti
+            isClearable
+            placeholder="Select Option"
+             />
           </div>
         </form>
       </div>
       <div class="modal-footer border-0">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-secondary" ref={refClose} data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onClick={onClickCreateTask}>Save changes</button>
       </div>
     </div>
   </div>
+  </div>
+  <button alt="heelo" type="button" ref={ref} class="create-project-button btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add task</button>
 </div>
   )
 }

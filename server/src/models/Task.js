@@ -14,17 +14,27 @@ const taskSchema = new Schema({
     type: String,
     required: true,
   },
-  done:{
+  assigned: [
+    {
+      type: Array,
+      default: [],
+    },
+  ],
+  status:{
     type: String,
     required: true,
   },
   project_id:{
     type: String,
-    required: true,
+    // required: true,
   },
   priority: {
     type: String,
     required: true,
+  },
+  start_date: {
+    type: String,
+    
   },
   due_date: {
     type: String,

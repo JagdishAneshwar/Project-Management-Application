@@ -20,7 +20,7 @@ router.get("/allTaskDetails", fetchuser, async (req, res) => {
 
 
 // ------------------------------------------ Route 2: update an existin projectusing PUT: "api/projects/update" -login required
-router.put("/updateProject/:id", fetchuser, async (req, res) => {
+router.put("/updateTask/:id", fetchuser, async (req, res) => {
   const {       
     title, 
     description, 
@@ -84,11 +84,21 @@ router.post("/addTask", async (req, res) => {
     spent,  
     due_date, 
     priority,
-    done,
+    status,
+    start_date,
+    assigned,
     project_id
   } = req.body;
 
-  // console.log(title, description, due_date, id, spent, done, priority);
+  console.log(title, 
+    description,  
+    spent,  
+    due_date, 
+    priority,
+    status,
+    start_date,
+    assigned,
+    project_id);
 
   try {
     const task = new Task({
@@ -97,7 +107,9 @@ router.post("/addTask", async (req, res) => {
         spent, 
         due_date, 
         priority, 
-        done,
+        status,
+        start_date,
+        assigned,
         project_id
     });
 
@@ -114,9 +126,10 @@ router.post("/addTask", async (req, res) => {
 
 // ------------------------------------ Route 4: delete an existing task using DELETE: "api/task/deleteProject" -login required
 router.delete("/removeTask/:id",  async (req, res) => {
-
     // find the task to be updated and update it
+
     var task = await Task.findById(req.params.id);
+    console.log(task)
     
     if (!task) {
       return res.status(404).send("Not found");

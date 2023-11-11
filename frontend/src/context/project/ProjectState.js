@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import projectContext from "./projectContext";
 
 const ProjectState = (props) => {
@@ -6,7 +7,8 @@ const ProjectState = (props) => {
   const notesInitial2 = [];
   const [projects, setproject] = useState(notesInitial);
   const [tasks, settask] = useState(notesInitial2);
-  const host = "https://project-management-application-ch9v.onrender.com/";
+  // const host = "https://project-management-application-ch9v.onrender.com/";
+  const host = "http://localhost:5000"
 
   const getProject = async () => {
     // API calls
@@ -61,13 +63,7 @@ const ProjectState = (props) => {
   };
 
   const createTask = async (
-    title,
-    description,
-    spent,
-    done,
-    project_id,
-    priority,
-    due_date
+    title, description, spent, start_date, status, assigned, priority, project_id, due_date
   ) => {
     const response = await fetch(`${host}/api/task/addTask`, {
       method: "POST",
@@ -76,16 +72,11 @@ const ProjectState = (props) => {
         "auth-token": localStorage.getItem("token"),
       },
       body: JSON.stringify({
-        title,
-        description,
-        spent,
-        priority,
-        done,
-        project_id,
-        due_date,
+        title, description, spent, start_date, status, assigned, priority, project_id, due_date
       }),
     });
     const task = await response.json();
+    console.log(task)
     settask(task);
   };
 
@@ -108,6 +99,7 @@ const ProjectState = (props) => {
     // Delete task function
     const deleteTask = async (_id) => {
       // API calls
+      console.log(_id)
       const response = await fetch(`${host}/api/task/removeTask/${_id}`, {
         method: "DELETE",
         headers: {
@@ -127,6 +119,7 @@ const ProjectState = (props) => {
     
     const deleteProject = async (_id) => {
       // API calls
+      
       const response = await fetch(`${host}/api/project/removeProject/${_id}`, {
         method: "DELETE",
         headers: {
@@ -190,6 +183,52 @@ const ProjectState = (props) => {
     setproject(newProject);
   };
 
+  const updateTask = async (
+    id,
+    title,
+    description,
+    spent,
+    priority,
+    done,
+    due_date
+  ) => {
+    // API calls
+    const response = await fetch(`${host}/api/task/updateTask/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": localStorage.getItem("token"),
+      },
+      body: JSON.stringify({
+        title,
+        description,
+        spent,
+        priority,
+        done,
+        due_date,
+      }),
+    });
+    // eslint-disable-next-line
+    const json = await response.json();
+  
+    let newTasks = JSON.parse(JSON.stringify(tasks));
+    // Logic to edit task
+    for (let index = 0; index < newTasks.length; index++) {
+      const element = newTasks[index];
+      if (element._id === id) {
+        newTasks[index].title = title;
+        newTasks[index].description = description;
+        newTasks[index].spent = spent;
+        newTasks[index].priority = priority;
+        newTasks[index].done = done;
+        newTasks[index].due_date = due_date;
+        break;
+      }
+    }
+    settask(newTasks);
+  };
+  
+
   const toComponentB = (project, navigate) => {
     console.log(project);
     navigate(`/project`, {
@@ -218,6 +257,7 @@ const ProjectState = (props) => {
         getTasks,
         deleteTask,
         deleteProject,
+        updateTask,
         tasks,
       }}
     >

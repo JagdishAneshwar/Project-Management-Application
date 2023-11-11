@@ -4,6 +4,7 @@ import DrawDoughnut from "../../../features/graph/dough/DrawDoughnut"
 import Profile from "../../../features/component/circular-profile/Profile"
 import DrawLine from '../../../features/graph/line/DrawLine';
 import Task from '../../../features/component/task-card/Task';
+import TaskModel from '../../../features/component/task-model/TaskModel';
 import { useLocation } from "react-router-dom";
 import "./_project.scss";
 
@@ -22,10 +23,15 @@ const Project = () => {
       const { getTasks, createTask, tasks } = context;
       const ref = useRef(null);
       const refClose = useRef(null);
-      
+
+      const projectTasks  = tasks.filter(task => task.project_id === id);
+      const todoTasks  = projectTasks.filter(task => task.status === "todo");
+      const progressTasks  = projectTasks.filter(task => task.status === "progress");
+      const completeTasks  = projectTasks.filter(task => task.status === "complete");
+      console.log(todoTasks)
     useEffect(() => {
       getTasks()
-    });
+    },[]);
     
       const [task, settask] = useState({
         title:"", 
@@ -90,35 +96,45 @@ const Project = () => {
     <DrawLine/>
     </div>
     </div>
+    <TaskModel id={id} />
     <div className='tasks-overview'>
       <h4 className='task-overview-title'>Tasks Overview</h4>
       <div className='tasks-wrapper d-flex flex-row justify-content-around'>
         <div className='todo-list'>
           <h4 className='todo-list-title'>To Do</h4>
           <div className='todo-wrapper'>
-          { tasks && tasks.map((task,i) => {
-          return ( <Task title={task.title} desc={task.description} id={tasks[i]._id} /> );
-        })
-      }
+          {todoTasks.map((task, i) => (
+            
+        <Task key={i} title={task.title} desc={task.description} priority={task.priority} due_date={task.due_date} id={task._id} />
+      ))}
+
             
           </div>
         </div>
         <div className='todo-list'>
-          <h4 className='todo-list-title'>To Do</h4>
+          <h4 className='todo-list-title'>On Progress</h4>
           <div className='todo-wrapper'>
-          { tasks && tasks.map((task) => {
-          return ( <Task title={task.title} desc={task.description} /> );
-        })
-      }
+          {progressTasks && Array.isArray(progressTasks) ? (
+            progressTasks.map((task, i) => (
+    <Task key={i} title={task.title} desc={task.description} id={task._id} />
+  ))
+) : (
+  <p>No tasks available.</p>
+)}
+
           </div>
         </div>
         <div className='todo-list'>
-          <h4 className='todo-list-title'>To Do</h4>
+          <h4 className='todo-list-title'>Completd</h4>
           <div className='todo-wrapper'>
-          { tasks && tasks.map((task) => {
-          return ( <Task title={task.title} desc={task.description} /> );
-        })
-      }
+          {completeTasks && Array.isArray(completeTasks) ? (
+            completeTasks.map((task, i) => (
+    <Task key={i} title={task.title} desc={task.description} id={task._id} />
+  ))
+) : (
+  <p>No tasks available.</p>
+)}
+
           </div>
         </div>
       </div>
