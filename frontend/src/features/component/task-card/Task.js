@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import projectContext from '../../../context/project/projectContext';
 import './_task.scss';
 
-const Task = ({ title, due_date, desc, priority, id, status }) => {
+const Task = ({ id,title, description, spent, start_date, status, assigned, priority, project_id, due_date }) => {
   const context = useContext(projectContext);
   const { deleteTask, updateTask } = context;
 
@@ -15,7 +15,8 @@ const Task = ({ title, due_date, desc, priority, id, status }) => {
   const handleStatusChange = (e) => {
     const newStatus = e.target.value;
     setSelectedStatus(newStatus);
-    updateTask(id, newStatus);
+    updateTask(id,title, description, spent, start_date, newStatus, assigned, priority, project_id, due_date);
+    console.log(newStatus)
   };
 
   return (
@@ -31,7 +32,7 @@ const Task = ({ title, due_date, desc, priority, id, status }) => {
         <label htmlFor='title'>Title</label>
         <h5 className='task-header'>{title}</h5>
         <label htmlFor='desc'>Description</label>
-        <p className='task-value'>{desc}</p>
+        <p className='task-value'>{description}</p>
       </div>
       <div className='task-footer  d-flex flex-row justify-content-between'>
         <div className='task-card-priority'>Priority: {priority}</div>

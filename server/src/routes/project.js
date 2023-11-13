@@ -22,17 +22,34 @@ router.get("/allProjectDetails", fetchuser, async (req, res) => {
 router.put("/updateProject/:id", fetchuser, async (req, res) => {
   const {       
     title, 
-    description, 
-    budget, 
+    description,
+    budget,
     spent, 
+    start_date, 
     due_date, 
+    priority, 
+    client, 
     tasks,
+    members, 
+    img
   } = req.body;
 
   // create new project object
   const newProject = {};
   if (title) {
     newProject.title = title;
+  }
+  if (start_date) {
+    newProject.start_date = start_date;
+  }
+  if (priority) {
+    newProject.priority = priority;
+  }
+  if (img) {
+    newProject.img = img;
+  }
+  if (members) {
+    newProject.members = members;
   }
   if (description) {
     newProject.description = description;
@@ -45,6 +62,9 @@ router.put("/updateProject/:id", fetchuser, async (req, res) => {
   }
   if (due_date) {
     newProject.due_date = due_date;
+  }
+  if (tasks) {
+    newProject.tasks = tasks;
   }
   if (client) {
     newProject.client = client;
@@ -87,7 +107,6 @@ router.post("/addProject", async (req, res) => {
     due_date, 
     priority, 
     client, 
-    completed,
     tasks,
     members, 
     img
@@ -103,11 +122,12 @@ router.post("/addProject", async (req, res) => {
       due_date, 
       priority, 
       client, 
-      completed,
       tasks,
       members,
       img
     });
+
+    console.log(project)
 
     const saveClothe = await project.save();
     res.send(saveClothe);

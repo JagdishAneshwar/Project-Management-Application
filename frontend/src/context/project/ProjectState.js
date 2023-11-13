@@ -27,14 +27,17 @@ const ProjectState = (props) => {
   };
 
   const createProject = async (
-    title,
+    title, 
     description,
     budget,
-    client,
-    members,
-    priority,
-    start_date,
-    due_date
+    spent, 
+    start_date, 
+    due_date, 
+    priority, 
+    client, 
+    tasks,
+    members, 
+    img
   ) => {
     const response = await fetch(`${host}/api/project/addProject`, {
       method: "POST",
@@ -48,17 +51,17 @@ const ProjectState = (props) => {
         budget,
         client,
         spent: "0",
-        completed: false,
-        tasks: "not assigned",
-        img: "null",
+        tasks: "",
+        img: "",
         members,
         priority,
         start_date,
-        due_date,
+        due_date
       }),
     });
 
     const project = await response.json();
+    console.log(project)
     setproject(project);
   };
 
@@ -140,12 +143,17 @@ const ProjectState = (props) => {
 
   const updateProject = async (
     id,
-    title,
+    title, 
     description,
     budget,
-    spent,
-    start_date,
-    due_date
+    spent, 
+    start_date, 
+    due_date, 
+    priority, 
+    client, 
+    tasks,
+    members, 
+    img
   ) => {
     // API calls
     const response = await fetch(`${host}/api/project/updateProject/${id}`, {
@@ -155,12 +163,18 @@ const ProjectState = (props) => {
         "auth-token": localStorage.getItem("token"),
       },
       body: JSON.stringify({
-        title,
-        description,
-        budget,
-        spent,
-        start_date,
-        due_date,
+        id: id || "",
+        title: title || "",
+        description: description || "",
+        budget: budget || "",
+        spent: spent || "",
+        start_date: start_date || "",
+        due_date: due_date || "",
+        priority: priority || "", 
+        client: client || "", 
+        tasks: tasks || "",
+        members: members || "", 
+        img: img || ""
       }),
     });
     // eslint-disable-next-line
@@ -177,50 +191,49 @@ const ProjectState = (props) => {
         newProject[index].spent = spent;
         newProject[index].start_date = start_date;
         newProject[index].due_date = due_date;
+        newProject[index].priority=priority;
+        newProject[index].client=client;
+        newProject[index].tasks=tasks;
+        newProject[index].members=members;
+        newProject[index].img=img
         break;
       }
     }
+    console.log(newProject)
     setproject(newProject);
   };
 
   const updateTask = async (
-    id,
-    title,
-    description,
-    spent,
-    priority,
-    done,
-    due_date
+    _id, title, description, spent, start_date, status, assigned, priority, project_id, due_date
   ) => {
     // API calls
-    const response = await fetch(`${host}/api/task/updateTask/${id}`, {
+    const response = await fetch(`${host}/api/task/updateTask/${_id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
         "auth-token": localStorage.getItem("token"),
       },
       body: JSON.stringify({
-        title,
-        description,
-        spent,
-        priority,
-        done,
-        due_date,
+       _id, title, description, spent, start_date, status, assigned, priority, project_id, due_date
       }),
     });
     // eslint-disable-next-line
     const json = await response.json();
+    console.log(json)
   
     let newTasks = JSON.parse(JSON.stringify(tasks));
     // Logic to edit task
     for (let index = 0; index < newTasks.length; index++) {
       const element = newTasks[index];
-      if (element._id === id) {
+      if (element._id === _id) {
         newTasks[index].title = title;
         newTasks[index].description = description;
         newTasks[index].spent = spent;
+        newTasks[index].start_date = start_date;
+        newTasks[index].status = status;
+        newTasks[index].assigned = assigned;
         newTasks[index].priority = priority;
-        newTasks[index].done = done;
+        newTasks[index].project_id = project_id;
         newTasks[index].due_date = due_date;
         break;
       }
@@ -240,6 +253,11 @@ const ProjectState = (props) => {
         spent: project.spent || "",
         start_date: project.start_date || "",
         due_date: project.due_date || "",
+        priority: project.priority || "", 
+        client: project.client || "", 
+        tasks: project.tasks || "",
+        members: project.members || "", 
+        img: project.img || ""
       },
     });
   };

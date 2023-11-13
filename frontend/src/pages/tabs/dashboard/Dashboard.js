@@ -3,9 +3,9 @@ import projectContext from "../../../context/project/projectContext"
 import Card from "../../../features/component/card/Card";
 import Project from "../../../features/component/project/Project";
 import DrawDoughnut from "../../../features/graph/dough/DrawDoughnut";
-import "./_home.scss";
+import "./_dashboard.scss";
 
-const Home = () => {
+const Dashboard = () => {
 
   const context = useContext(projectContext);
   const { tasks, getTasks, projects, getProject } = context;
@@ -28,14 +28,14 @@ const Home = () => {
   const task_len = tasks.length;
   const task_complete = tasks.filter((task) => {
     return (
-      task.done === "true"
+      task.status === "complete"
     );
   });
   const complete_length = task_complete.length;
 
   const task_incomplete = tasks.filter((task) => {
     return (
-      task.done === "false"
+      task.status === "complete"
     );
   });
   const incomplete_length = task_incomplete.length;
@@ -61,22 +61,22 @@ const Home = () => {
   const data2 = [`${complete_length/task_len}` || 0, `${incomplete_length/task_len}` || 0]
 
   return (
-    <div className="home">
+    <div className="dashboard">
       <h4 className="dashboard-title">Dashboard</h4>
       <div className="d-flex flex-row task-section  justify-content-around align-items-center pt-3">
         <Card
           img={require(`../../../res/image/ongoing.png`)}
           header="Ongoing Projects"
-          value="7"
+          value={project_len}
         />
         <Card
           img={require(`../../../res/image/under.png`)}
-          header="Ongoing Projects"
-          value="7"
+          header="Budget Defiecient"
+          value={incomplete_length}
         />
         <Card
           img={require(`../../../res/image/high_risk.png`)}
-          header="Ongoing Projects"
+          header="Risked Projects"
           value="7"
         />
       </div>
@@ -112,7 +112,7 @@ const Home = () => {
             title={project.title}
             progress={project_complete_length/project_len*100}
             total_tasks={task_len}
-            completed_task={project_complete_length}
+            completed_task={complete_length}
             priority={project.priority}
             due={project.due_date}
             risks="1"
@@ -126,5 +126,5 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Dashboard;
 

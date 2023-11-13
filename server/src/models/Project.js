@@ -10,7 +10,6 @@ const projectSchema = new Schema({
   },
   img: {
     type: String,
-    required: true,
   },
   description: {
     type: String,
@@ -32,14 +31,12 @@ const projectSchema = new Schema({
     type: String,
     required: true,
   },
-  completed: {
-    type: Number,
-    required: true,
-  },
-  tasks: {
-    type: String,
-    required: true,
-  },
+  tasks: [
+    {
+      type: Array,
+      default: [],
+    }
+  ],
   members: [
     {
       type: Array,

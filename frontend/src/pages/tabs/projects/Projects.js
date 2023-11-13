@@ -15,14 +15,17 @@ const Projects = () => {
   const refClose = useRef(null);
 
   const [project, setproject] = useState({
-      title: "",
-      description:"",
-      budget: "",
-      client: "",
-      members:"",
-      priority:"",
-      start_date:"",
-      due_date:""
+    title:"", 
+    description:"",
+    budget:"",
+    spent:"", 
+    start_date:"", 
+    due_date:"", 
+    priority:"", 
+    client:"", 
+    tasks:"",
+    members:"", 
+    img:""
   })
     const data = [
     {
@@ -64,7 +67,18 @@ const Projects = () => {
 
     const onClickCreateProject = (e) => {
       ref.current.click();
-      createProject(project.title, project.description, project.budget, project.client, {members:selectedValue}, project.priority, project.start_date, project.due_date);
+      createProject(project.title, 
+      project.description,
+      project.budget,
+      project.spent, 
+      project.start_date, 
+      project.due_date, 
+      project.priority, 
+      project.client, 
+      project.tasks,
+      {members:selectedValue},
+      project.img)
+      console.log(project)
     };
   return (
     <div className='projects'>
@@ -110,6 +124,18 @@ const Projects = () => {
                 onChange={onChange}
               />
             </div>
+            {/* <div className="mb-3">
+              <label htmlFor="exampleInputBudget" className="form-label">
+                Image
+              </label>
+              <input
+                type="file"
+                className="form-control"
+                name="img"
+                onChange={onChange}
+              />
+            </div> */}
+            
             <div className="mb-3">
               <label htmlFor="exampleInputClient" className="form-label">
                 Client
@@ -182,7 +208,20 @@ const Projects = () => {
       <h4>Projects</h4>
      <div class="all-project-lists row row-cols-md-3">
         { projects && projects.map((project) => {
-          return (<ProjectOverview key={project._id} project={project} /> );
+          return (<ProjectOverview 
+          id={project._id}
+    title ={project.title}
+    description={project.description}
+    budget={project.budget}
+    spent={project.spent}
+    start_date={project.start_date}
+    due_date={project.due_date}
+    priority={project.priority}
+    client={project.client}
+    tasks={project.tasks}
+    members={project.members}
+    img={project.img}
+     /> );
         })
       }
       <div class=" project-card-overview">

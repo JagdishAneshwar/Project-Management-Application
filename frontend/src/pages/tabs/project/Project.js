@@ -4,53 +4,106 @@ import DrawDoughnut from "../../../features/graph/dough/DrawDoughnut"
 import Profile from "../../../features/component/circular-profile/Profile"
 import DrawLine from '../../../features/graph/line/DrawLine';
 import Task from '../../../features/component/task-card/Task';
+import Addtask from '../tasks/Tasks'
 import TaskModel from '../../../features/component/task-model/TaskModel';
 import { useLocation } from "react-router-dom";
 import "./_project.scss";
 
 const Project = () => {
   const location = useLocation();
-    const {id,
-      title,
+  
+    const {  id,
+      title, 
       description,
       budget,
-      spent,
-      start_date,
-      due_date} = location.state;
-
+      spent, 
+      start_date, 
+      due_date, 
+      priority, 
+      client, 
+      tasklist,
+      members, 
+      img} = location.state;
       const data = [ "12","30", "2"]
       const context = useContext(projectContext);
-      const { getTasks, createTask, tasks } = context;
-      const ref = useRef(null);
-      const refClose = useRef(null);
+      const { getTasks, updateProject, tasks } = context;
+      const [project,setProject] = useState("")
+      
+
+      const onClickProjectUpdate = (e) => {
+        
+        updateProject(
+          id,
+          title, 
+          description,
+          budget,
+          spent, 
+          start_date, 
+          due_date, 
+          priority, 
+          client, 
+          tasklist,
+          members, 
+          img);   
+          console.log(id,
+            title, 
+            description,
+            budget,
+            spent, 
+            start_date, 
+            due_date, 
+            priority, 
+            client, 
+            tasklist,
+            members, 
+            img)
+      };
 
       const projectTasks  = tasks.filter(task => task.project_id === id);
       const todoTasks  = projectTasks.filter(task => task.status === "todo");
       const progressTasks  = projectTasks.filter(task => task.status === "progress");
       const completeTasks  = projectTasks.filter(task => task.status === "complete");
-      console.log(todoTasks)
+      
     useEffect(() => {
       getTasks()
     },[]);
-    
-      const [task, settask] = useState({
-        title:"", 
-        project_id:id,
-        description:"",  
-        spent:null,  
-        due_date:"", 
-        priority:"", 
-        done:"false"
-      })
 
-      const onChange = (e) => {
-        settask({ ...task, [e.target.name]: e.target.value });
-        };
+        const names = [
+    {
+      value: 1,
+      label: "cerulean"
+    },
+    {
+      value: 2,
+      label: "fuchsia rose"
+    },
+    {
+      value: 3,
+      label: "true red"
+    },
+    {
+      value: 4,
+      label: "aqua sky"
+    },
+    {
+      value: 5,
+      label: "tigerlily"
+    },
+    {
+      value: 6,
+      label: "blue turquoise"
+    }
+  ];
+  const getMemberName = (id) => {
+    // Add logic to get the name corresponding to the id
+    // For example, if names is an array of objects with value and label properties
+    const member = names.find((item) => item.value === id);
+    return member ? member.label : `Unknown Member ${id}`;
+  };
+  
+  
 
-        const onClickCreateTask = (e) => {
-          ref.current.click();
-      createTask(task.title, task.description, task.spent, task.done, task.project_id, task.priority, task.due_date);   
-    };
+
   return (
     <div className='project-main' key={id}>
     <h4 className="dashboard-title">Dashboard</h4>
@@ -64,6 +117,7 @@ const Project = () => {
       </div>
     </div>
     <h4 className='summary-title title'>Summary</h4>
+
     <div className='summary border-bottom border-1 mb-3'>
       <div className='summary-wrap d-flex flex-row  justify-content-between'>
         <div className='budget-info'>
@@ -105,7 +159,7 @@ const Project = () => {
           <div className='todo-wrapper'>
           {todoTasks.map((task, i) => (
             
-        <Task key={i} title={task.title} desc={task.description} priority={task.priority} due_date={task.due_date} id={task._id} />
+        <Task key={i} id={task._id} title={task.title} description={task.description} spent={task.spent} start_date={task.start_date} status={task.status} assigned={task.assigned} priority={task.priority} project_id={task.project_id} due_date={task.due_date} />
       ))}
 
             
@@ -116,7 +170,7 @@ const Project = () => {
           <div className='todo-wrapper'>
           {progressTasks && Array.isArray(progressTasks) ? (
             progressTasks.map((task, i) => (
-    <Task key={i} title={task.title} desc={task.description} id={task._id} />
+              <Task key={i} id={task._id} title={task.title} description={task.description} spent={task.spent} start_date={task.start_date} status={task.status} assigned={task.assigned} priority={task.priority} project_id={task.project_id} due_date={task.due_date} />
   ))
 ) : (
   <p>No tasks available.</p>
@@ -129,7 +183,7 @@ const Project = () => {
           <div className='todo-wrapper'>
           {completeTasks && Array.isArray(completeTasks) ? (
             completeTasks.map((task, i) => (
-    <Task key={i} title={task.title} desc={task.description} id={task._id} />
+              <Task key={i} id={task._id} title={task.title} description={task.description} spent={task.spent} start_date={task.start_date} status={task.status} assigned={task.assigned} priority={task.priority} project_id={task.project_id} due_date={task.due_date} />
   ))
 ) : (
   <p>No tasks available.</p>
@@ -139,87 +193,25 @@ const Project = () => {
         </div>
       </div>
     </div>
-    <button type="button" className="btn btn-success btn-lg w-50" ref={ref} data-bs-toggle="modal" data-bs-target="#update">Update</button>
+    <Addtask id={id} />
+    <div>
+  <h4>Members:</h4>
+  {members.map((group, index) => (
+    <div key={index}>
+      {group.map((memberObj, index) => (
+        <ul key={index}>
+          {memberObj.members.map((id, index) => (
+            <div key={index}>{`Member: ${getMemberName(id)}`}</div>
+          ))}
+        </ul>
+      ))}
+    </div>
+  ))}
+</div>
+    <button type="button" className="btn btn-success btn-lg w-50" onClick={onClickProjectUpdate} data-bs-toggle="modal" data-bs-target="#update">Update</button>
     <button type="button" class="btn btn-danger btn-lg w-50">Delete</button>
 
-  <div class="task-modal modal fade" tabindex="-1" id="update" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header border-0">
-        <h5 class="modal-title">Add task</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-      <form className="add-task">
-          <div className="mb-3">
-            <label htmlfor="exampleInputEmail1" className="form-label">
-              Title
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
-              name="title"
-              onChange={onChange}
 
-            />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="exampleInputPassword1" className="form-label">
-              Description
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              name="description"
-              onChange={onChange}
-
-            />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="exampleInputPassword1" className="form-label">
-              Cost Spent
-            </label>
-            <input
-              type="number"
-              className="form-control"
-              name="spent"
-              onChange={onChange}
-            />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="exampleInputPassword1" className="form-label">
-              Due Date
-            </label>
-            <input
-              type="date"
-              className="form-control"
-              name="due_date"
-              onChange={onChange}
-            />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="exampleInputPassword1" className="form-label">
-              Priority
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              name="priority"
-              onChange={onChange}
-
-            />
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer border-0">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"  ref={refClose}>Close</button>
-        <button type="button" class="btn btn-primary"  onClick={onClickCreateTask} >Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
   </div>
   )
 }

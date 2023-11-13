@@ -23,13 +23,17 @@ router.get("/allTaskDetails", fetchuser, async (req, res) => {
 router.put("/updateTask/:id", fetchuser, async (req, res) => {
   const {       
     title, 
-    description, 
-    budget, 
-    spent, 
+    description,  
+    spent,  
     due_date, 
+    priority,
+    status,
+    start_date,
+    assigned,
+    project_id
   } = req.body;
 
-  // create new task object
+  // create new project object
   const newProject = {};
   if (title) {
     newProject.title = title;
@@ -37,41 +41,62 @@ router.put("/updateTask/:id", fetchuser, async (req, res) => {
   if (description) {
     newProject.description = description;
   }
-  if (budget) {
-    newProject.budget = budget;
+  if (priority) {
+    newProject.priority = priority;
   }
   if (spent) {
     newProject.spent = spent;
   }
+  if (status) {
+    newProject.status = status;
+  }
+  if (start_date) {
+    newProject.start_date = start_date;
+  }
+  if (assigned) {
+    newProject.assigned = assigned;
+  }
+  if (project_id) {
+    newProject.project_id = project_id;
+  }
   if (due_date) {
     newProject.due_date = due_date;
   }
-  if (client) {
-    newProject.client = client;
-  }
 
-  // find the task to be updated and update it
-  var task = await Task.findById(req.params.id);
-  if (!task) {
+  // find the project to be updated and update it
+  var project = await Task.findById(req.params.id);
+  
+  if (!project) {
     return res.status(404).send("not found");
   }
 
-  if (task.user.toString() !== req.user.id) {
+  
+
+  if (project._id.toString() !== req.params.id) {
     return res.status(401).send("Unauthorized");
   }
 
   try {
-    task = await Projects.findByIdAndUpdate(
+    project = await Task.findByIdAndUpdate(
       req.params.id,
       { $set: newProject },
       { new: true }
     );
-    res.json(task);
+    console.log(project)
+    res.json(project);
   } catch (err) {
     console.error(err.message);
     res.json({ error: "internal Server Error", err: err.message });
   }
 });
+
+
+
+
+
+
+
+
 
 
 
