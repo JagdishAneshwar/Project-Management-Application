@@ -32,7 +32,7 @@ router.put("/updateTask/:id", fetchuser, async (req, res) => {
     assigned,
     project_id
   } = req.body;
-
+console.log(title, status)
   // create new project object
   const newProject = {};
   if (title) {
@@ -65,12 +65,10 @@ router.put("/updateTask/:id", fetchuser, async (req, res) => {
 
   // find the project to be updated and update it
   var project = await Task.findById(req.params.id);
-  
+  console.log(status)
   if (!project) {
     return res.status(404).send("not found");
   }
-
-  
 
   if (project._id.toString() !== req.params.id) {
     return res.status(401).send("Unauthorized");

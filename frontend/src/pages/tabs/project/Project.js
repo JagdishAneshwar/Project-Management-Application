@@ -4,7 +4,8 @@ import DrawDoughnut from "../../../features/graph/dough/DrawDoughnut"
 import Profile from "../../../features/component/circular-profile/Profile"
 import DrawLine from '../../../features/graph/line/DrawLine';
 import Task from '../../../features/component/task-card/Task';
-import Addtask from '../tasks/Tasks'
+import { Link, useNavigate } from "react-router-dom";
+import UpdateProject from '../../../features/component/update-project/UpdateProject'
 import TaskModel from '../../../features/component/task-model/TaskModel';
 import { useLocation } from "react-router-dom";
 import "./_project.scss";
@@ -12,7 +13,7 @@ import "./_project.scss";
 const Project = () => {
   const location = useLocation();
   
-    const {  id,
+    const {  _id,
       title, 
       description,
       budget,
@@ -24,49 +25,57 @@ const Project = () => {
       tasklist,
       members, 
       img} = location.state;
+      
+      // Create a new Date object
+
+
+// Log the current date
+
+
+
+
       const data = [ "12","30", "2"]
       const context = useContext(projectContext);
-      const { getTasks, updateProject, tasks } = context;
-      const [project,setProject] = useState("")
-      
+      const { getTasks, tasks, getProjectHistory, projecthistory } = context;
 
-      const onClickProjectUpdate = (e) => {
-        
-        updateProject(
-          id,
-          title, 
-          description,
-          budget,
-          spent, 
-          start_date, 
-          due_date, 
-          priority, 
-          client, 
-          tasklist,
-          members, 
-          img);   
-          console.log(id,
-            title, 
-            description,
-            budget,
-            spent, 
-            start_date, 
-            due_date, 
-            priority, 
-            client, 
-            tasklist,
-            members, 
-            img)
-      };
-
-      const projectTasks  = tasks.filter(task => task.project_id === id);
+      const projectTasks  = tasks.filter(task => task.project_id === _id);
       const todoTasks  = projectTasks.filter(task => task.status === "todo");
       const progressTasks  = projectTasks.filter(task => task.status === "progress");
       const completeTasks  = projectTasks.filter(task => task.status === "complete");
+
+
+      const overdueCalculator = (due_date) =>{
+        const currentDate = new Date();  // Current date
+        const dueDate = new Date(due_date);  // Example due date
+        
+        // Calculate the time difference in milliseconds
+        const timeDifference = dueDate.getTime() - currentDate.getTime();
+        
+        // Convert milliseconds to hours
+        const hoursDifference = timeDifference / (1000 * 60 * 60);
+        
+        return(hoursDifference)
+      }
+
+       const overdue_tasks = tasks.filter((task)=>{
+         return(
+           task.status !== "complete" && overdueCalculator(task.due_date) <= 0
+         )
+       })
+
+      
       
     useEffect(() => {
       getTasks()
+      getProjectHistory(_id)
     },[]);
+
+
+const dates = projecthistory.map(item => new Date(item.date).toLocaleDateString());
+const earned_value = projecthistory.map(item => item.earned_value);
+const spent_value = projecthistory.map(item => item.spent );
+
+
 
         const names = [
     {
@@ -94,6 +103,9 @@ const Project = () => {
       label: "blue turquoise"
     }
   ];
+
+
+
   const getMemberName = (id) => {
     // Add logic to get the name corresponding to the id
     // For example, if names is an array of objects with value and label properties
@@ -101,12 +113,9 @@ const Project = () => {
     return member ? member.label : `Unknown Member ${id}`;
   };
   
-  
-
-
-  return (
-    <div className='project-main' key={id}>
-    <h4 className="dashboard-title">Dashboard</h4>
+    return (
+    <div className='project-main' key={_id}>
+    <Link to="/dashboard"><h4 className="dashboard-title">Dashboard</h4></Link>
     <div className='info d-flex flex-row justify-content-around align-content-center p-3 border-bottom border-1' >
       <div className="project-profile">
       <Profile />
@@ -125,6 +134,10 @@ const Project = () => {
         <div className='spent'>Spent: {spent}</div>
         </div>
         <div className='date-info'>
+        <div className='start-date'>Hours of Work Left: {Math.round(overdueCalculator(due_date))/8-8}</div>
+        <div className='due-date'>Due Date: {due_date}</div>
+        </div>
+        <div className='date-info'>
         <div className='start-date'>Start Date: {start_date}</div>
         <div className='due-date'>Due Date: {due_date}</div>
         </div>
@@ -136,21 +149,18 @@ const Project = () => {
             title="Project Progress"
             position="right"
             align="center"
-            label1="Overdue"
-            label2="Ongoing Projects"
-            label3="Upcoming deadline"
-            info1={data[0]}
-            info2={data[1]}
-            info3={data[2]}
+            label={["Overdue", "Ongoing Projects", "Upcoming deadline", "completed"]}
+            values={[overdue_tasks.length, progressTasks.length, todoTasks.length, completeTasks.length]}
             titpos="top"
             titalgn="start"
           />
     </div>
     <div className='project-line-chart'>
-    <DrawLine/>
+    <DrawLine dates={dates} earned_value={earned_value} spent={spent_value} />
     </div>
     </div>
-    <TaskModel id={id} />
+    <TaskModel id={_id} />
+    <UpdateProject id={_id}  title={title} description={description}  budget={budget} spent={spent} start_date={start_date} due_date={due_date} priority={priority} client={client} tasklist={tasklist} members={members} img={img}/>
     <div className='tasks-overview'>
       <h4 className='task-overview-title'>Tasks Overview</h4>
       <div className='tasks-wrapper d-flex flex-row justify-content-around'>
@@ -159,7 +169,7 @@ const Project = () => {
           <div className='todo-wrapper'>
           {todoTasks.map((task, i) => (
             
-        <Task key={i} id={task._id} title={task.title} description={task.description} spent={task.spent} start_date={task.start_date} status={task.status} assigned={task.assigned} priority={task.priority} project_id={task.project_id} due_date={task.due_date} />
+        <Task key={i} id={_id} task_id={task._id}  title={task.title} description={task.description} spent={task.spent} start_date={task.start_date} status={task.status} assigned={task.assigned} priority={task.priority} project_id={task.project_id} due_date={task.due_date} />
       ))}
 
             
@@ -170,7 +180,7 @@ const Project = () => {
           <div className='todo-wrapper'>
           {progressTasks && Array.isArray(progressTasks) ? (
             progressTasks.map((task, i) => (
-              <Task key={i} id={task._id} title={task.title} description={task.description} spent={task.spent} start_date={task.start_date} status={task.status} assigned={task.assigned} priority={task.priority} project_id={task.project_id} due_date={task.due_date} />
+              <Task key={i} id={_id} task_id={task._id} title={task.title} description={task.description} spent={task.spent} start_date={task.start_date} status={task.status} assigned={task.assigned} priority={task.priority} project_id={task.project_id} due_date={task.due_date} />
   ))
 ) : (
   <p>No tasks available.</p>
@@ -183,7 +193,7 @@ const Project = () => {
           <div className='todo-wrapper'>
           {completeTasks && Array.isArray(completeTasks) ? (
             completeTasks.map((task, i) => (
-              <Task key={i} id={task._id} title={task.title} description={task.description} spent={task.spent} start_date={task.start_date} status={task.status} assigned={task.assigned} priority={task.priority} project_id={task.project_id} due_date={task.due_date} />
+              <Task key={i} id={_id} task_id={task._id} title={task.title} description={task.description} spent={task.spent} start_date={task.start_date} status={task.status} assigned={task.assigned} priority={task.priority} project_id={task.project_id} due_date={task.due_date} />
   ))
 ) : (
   <p>No tasks available.</p>
@@ -193,7 +203,7 @@ const Project = () => {
         </div>
       </div>
     </div>
-    <Addtask id={id} />
+    
     <div>
   <h4>Members:</h4>
   {members.map((group, index) => (
@@ -208,7 +218,8 @@ const Project = () => {
     </div>
   ))}
 </div>
-    <button type="button" className="btn btn-success btn-lg w-50" onClick={onClickProjectUpdate} data-bs-toggle="modal" data-bs-target="#update">Update</button>
+
+    <button type="button" className="btn btn-success btn-lg w-50" data-bs-toggle="modal" data-bs-target="#updateproject">Update</button>
     <button type="button" class="btn btn-danger btn-lg w-50">Delete</button>
 
 

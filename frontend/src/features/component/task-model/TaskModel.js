@@ -6,6 +6,7 @@ import Select from 'react-select'
 
 const TaskModel = ({id}) => {
   const context = useContext(projectContext);
+
   const { tasks, createTask, getTasks } = context;
 
       const data = [

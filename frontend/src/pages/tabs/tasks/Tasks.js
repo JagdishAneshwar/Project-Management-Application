@@ -13,7 +13,7 @@ const Tasks = ({id}) => {
     status:""
   })
   const context = useContext(projectContext);
-  const { createTask } = context;
+  const { createTask, updateProject } = context;
   const refClose = useRef(null);
   const onChange = (e) => {
     settask({ ...task, [e.target.name]: e.target.value });
@@ -21,7 +21,8 @@ const Tasks = ({id}) => {
 
     const onClickCreateTask = (e) => {
   
-  createTask(task.title, task.description, task.spent, task.status, task.project_id, task.priority, task.due_date);   
+  createTask(task.title, task.description, task.spent, task.status, task.project_id, task.priority, task.due_date); 
+  updateProject(task.project_id,task.title)
 };
   return (
     <div class="task-modal modal fade" tabindex="-1" id="update" aria-labelledby="exampleModalLabel" aria-hidden="true">

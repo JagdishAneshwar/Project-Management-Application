@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 
 const ProjectOverview = ({ 
-  id,
+  _id,
   title, 
   description,
   budget,
@@ -24,14 +24,14 @@ const ProjectOverview = ({
 
 
   const onClickRemoveProject= () => {
-    console.log(id)
-    deleteProject(id)
+    
+    deleteProject(_id)
     };
 
 
   return ( 
     <div 
-    class=" project-card-overview" key={id}      onClick={() => { toComponentB({  id,  title, 
+    class=" project-card-overview" key={_id}  onClick={() => { toComponentB({  _id,  title, 
     description,
     budget,
     spent, 

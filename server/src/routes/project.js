@@ -1,9 +1,23 @@
 const fetchuser = require("../middleware/fetchuser");
 const Project = require("../models/Project");
 const express = require("express");
+const ProjectHistory = require("../models/ProjectHistory");
 const router = express.Router();
 
-
+router.get("/projecthistory/:id", fetchuser,async (req, res) => {
+  try {
+    // Use req.query to access query parameters from the URL
+    
+  
+    // Use await to wait for the query execution
+    const projecthistory = await ProjectHistory.find({project_id: req.params.id });
+    res.json(projecthistory);
+  } catch (err) {
+    console.log(err);
+    // Handle errors appropriately (e.g., send an error response)
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 // ---------------------------------- Route 1: get all projects using GET: "api/project/allProjectDetails"
 router.get("/allProjectDetails", fetchuser, async (req, res) => {
@@ -26,7 +40,7 @@ router.put("/updateProject/:id", fetchuser, async (req, res) => {
     budget,
     spent, 
     start_date, 
-    due_date, 
+    due_date,
     priority, 
     client, 
     tasks,
@@ -34,7 +48,6 @@ router.put("/updateProject/:id", fetchuser, async (req, res) => {
     img
   } = req.body;
 
-  // create new project object
   const newProject = {};
   if (title) {
     newProject.title = title;
@@ -70,23 +83,24 @@ router.put("/updateProject/:id", fetchuser, async (req, res) => {
     newProject.client = client;
   }
 
+console.log(req.params.id)
   // find the project to be updated and update it
   var project = await Project.findById(req.params.id);
   if (!project) {
     return res.status(404).send("not found");
   }
-
   if (project.user.toString() !== req.user.id) {
     return res.status(401).send("Unauthorized");
   }
-
+  
   try {
-    project = await Projects.findByIdAndUpdate(
+    project = await Project.findByIdAndUpdate(
       req.params.id,
       { $set: newProject },
       { new: true }
     );
     res.json(project);
+    console.log(project,"success")
   } catch (err) {
     console.error(err.message);
     res.json({ error: "internal Server Error", err: err.message });
@@ -97,7 +111,7 @@ router.put("/updateProject/:id", fetchuser, async (req, res) => {
 
 
 // ----------------------------------- Route 3: add new project using POSt: "api/project/addProject"
-router.post("/addProject", async (req, res) => {
+router.post("/addProject", fetchuser, async (req, res) => {
   const {
     title, 
     description,
@@ -113,7 +127,10 @@ router.post("/addProject", async (req, res) => {
   } = req.body;
 
   try {
+
+    console.log(req.user,"req")
     const project = new Project({
+      user:req.user.id,
       title, 
       description, 
       budget, 
@@ -127,9 +144,10 @@ router.post("/addProject", async (req, res) => {
       img
     });
 
-    console.log(project)
+    console.log(project, "project")
 
     const saveClothe = await project.save();
+    console.log(saveClothe, "saved")
     res.send(saveClothe);
 
   } catch (err) {

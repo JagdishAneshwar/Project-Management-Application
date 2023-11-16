@@ -13,7 +13,6 @@ const Projects = () => {
   },[]);
   const ref = useRef(null);
   const refClose = useRef(null);
-
   const [project, setproject] = useState({
     title:"", 
     description:"",
@@ -209,7 +208,7 @@ const Projects = () => {
      <div class="all-project-lists row row-cols-md-3">
         { projects && projects.map((project) => {
           return (<ProjectOverview 
-          id={project._id}
+          _id={project._id}
     title ={project.title}
     description={project.description}
     budget={project.budget}

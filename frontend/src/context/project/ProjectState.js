@@ -6,6 +6,7 @@ const ProjectState = (props) => {
   const notesInitial = [];
   const notesInitial2 = [];
   const [projects, setproject] = useState(notesInitial);
+  const [projecthistory, setprojecthistory] = useState(notesInitial);
   const [tasks, settask] = useState(notesInitial2);
   // const host = "https://project-management-application-ch9v.onrender.com/";
   const host = "http://localhost:5000"
@@ -24,6 +25,22 @@ const ProjectState = (props) => {
     );
     const json = await response.json();
     setproject(json);
+  };
+  const getProjectHistory = async (_id) => {
+    // API calls
+    const response = await fetch(
+      `${host}/api/project/projecthistory/${_id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+        
+      }
+    );
+    const json = await response.json();
+    setprojecthistory(json);
   };
 
   const createProject = async (
@@ -61,7 +78,6 @@ const ProjectState = (props) => {
     });
 
     const project = await response.json();
-    console.log(project)
     setproject(project);
   };
 
@@ -79,7 +95,7 @@ const ProjectState = (props) => {
       }),
     });
     const task = await response.json();
-    console.log(task)
+    
     settask(task);
   };
 
@@ -102,7 +118,7 @@ const ProjectState = (props) => {
     // Delete task function
     const deleteTask = async (_id) => {
       // API calls
-      console.log(_id)
+      
       const response = await fetch(`${host}/api/task/removeTask/${_id}`, {
         method: "DELETE",
         headers: {
@@ -113,7 +129,7 @@ const ProjectState = (props) => {
       
       // eslint-disable-next-line
       const json = await response.json();
-      console.log(json)
+      
       const newTasks = tasks.filter((task) => {
         return task._id !== _id;
       });
@@ -133,7 +149,7 @@ const ProjectState = (props) => {
       
       // eslint-disable-next-line
       const json = await response.json();
-      console.log(json)
+      
       const newProjects = projects.filter((project) => {
         return projects._id !== _id;
       });
@@ -156,6 +172,7 @@ const ProjectState = (props) => {
     img
   ) => {
     // API calls
+    
     const response = await fetch(`${host}/api/project/updateProject/${id}`, {
       method: "PUT",
       headers: {
@@ -163,23 +180,21 @@ const ProjectState = (props) => {
         "auth-token": localStorage.getItem("token"),
       },
       body: JSON.stringify({
-        id: id || "",
-        title: title || "",
-        description: description || "",
-        budget: budget || "",
-        spent: spent || "",
-        start_date: start_date || "",
-        due_date: due_date || "",
-        priority: priority || "", 
-        client: client || "", 
-        tasks: tasks || "",
-        members: members || "", 
-        img: img || ""
-      }),
+        title,
+        description,
+        budget,
+        spent,
+        start_date,
+        due_date,
+        priority, 
+        client, 
+        tasks,
+        members, 
+        img  }),
     });
     // eslint-disable-next-line
     const json = await response.json();
-
+    
     let newProject = JSON.parse(JSON.stringify(projects));
     // Logic to edit note
     for (let index = 0; index < newProject.length; index++) {
@@ -199,33 +214,33 @@ const ProjectState = (props) => {
         break;
       }
     }
-    console.log(newProject)
+    
     setproject(newProject);
   };
 
   const updateTask = async (
-    _id, title, description, spent, start_date, status, assigned, priority, project_id, due_date
+    task_id, title, description, spent, start_date, status, assigned, priority, project_id, due_date
   ) => {
     // API calls
-    const response = await fetch(`${host}/api/task/updateTask/${_id}`, {
+    const response = await fetch(`${host}/api/task/updateTask/${task_id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
         "auth-token": localStorage.getItem("token"),
       },
       body: JSON.stringify({
-       _id, title, description, spent, start_date, status, assigned, priority, project_id, due_date
+         title, description, spent, start_date, status, assigned, priority, project_id, due_date
       }),
     });
     // eslint-disable-next-line
     const json = await response.json();
-    console.log(json)
+    
   
     let newTasks = JSON.parse(JSON.stringify(tasks));
     // Logic to edit task
     for (let index = 0; index < newTasks.length; index++) {
       const element = newTasks[index];
-      if (element._id === _id) {
+      if (element._id === task_id) {
         newTasks[index].title = title;
         newTasks[index].description = description;
         newTasks[index].spent = spent;
@@ -242,23 +257,30 @@ const ProjectState = (props) => {
   };
   
 
-  const toComponentB = (project, navigate) => {
-    console.log(project);
+  const toComponentB = ({  _id,  title, 
+    description,
+    budget,
+    spent, 
+    start_date, 
+    due_date, 
+    priority, 
+    client, 
+    tasklist: tasks,
+    members, 
+    img}, navigate) => {
+    
     navigate(`/project`, {
-      state: {
-        id: project._id || "",
-        title: project.title || "",
-        description: project.description || "",
-        budget: project.budget || "",
-        spent: project.spent || "",
-        start_date: project.start_date || "",
-        due_date: project.due_date || "",
-        priority: project.priority || "", 
-        client: project.client || "", 
-        tasks: project.tasks || "",
-        members: project.members || "", 
-        img: project.img || ""
-      },
+      state: {  _id,  title, 
+        description,
+        budget,
+        spent, 
+        start_date, 
+        due_date, 
+        priority, 
+        client, 
+        tasklist: tasks,
+        members, 
+        img},
     });
   };
 
@@ -266,6 +288,7 @@ const ProjectState = (props) => {
     <projectContext.Provider
       value={{
         projects,
+        projecthistory,
         setproject,
         createProject,
         getProject,
@@ -274,6 +297,7 @@ const ProjectState = (props) => {
         createTask,
         getTasks,
         deleteTask,
+        getProjectHistory,
         deleteProject,
         updateTask,
         tasks,

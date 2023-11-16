@@ -4,27 +4,27 @@ import 'chart.js/auto'
 import { Line } from 'react-chartjs-2';
 
   
-const DrawLine = () => {
+const DrawLine = ({dates, earned_value, spent }) => {
 
-    const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+    const labels = dates
     const data = {
       labels: labels,
       datasets: [
+        // {
+        //   label: 'Dataset 1',
+        //   data: [14, 26,38,60,72,93,103],
+        //   borderColor: 'rgb(255, 99, 132)',
+        //   backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        // },
         {
-          label: 'Dataset 1',
-          data: [14, 26,38,60,72,93,103],
-          borderColor: 'rgb(255, 99, 132)',
-          backgroundColor: 'rgba(255, 99, 132, 0.5)',
-        },
-        {
-          label: 'Dataset 2',
-          data: [12, 24,36,48,60,72,84],
+          label: 'Spent',
+          data: spent,
           borderColor: 'rgb(53, 162, 235)',
           backgroundColor: 'rgba(53, 162, 235, 0.5)',
         },
         {
-          label: 'Dataset 3',
-          data: [10, 22,29,34,48,52,60],
+          label: 'earned value',
+          data: earned_value,
           borderColor: 'rgba(255, 206, 86)',
           backgroundColor: 'rgba(255, 206, 86, 0.5)',
         },

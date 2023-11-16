@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "node-cron": "^3.0.3",
+    "node-schedule": "^2.1.1"
+  }
+}

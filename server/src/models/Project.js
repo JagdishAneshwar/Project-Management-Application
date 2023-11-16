@@ -8,6 +8,10 @@ const projectSchema = new Schema({
     type: String,
     required: true,
   },
+  user:{
+    type:String,
+    required:true
+  },
   img: {
     type: String,
   },

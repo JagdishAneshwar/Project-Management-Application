@@ -2,21 +2,22 @@ import React, { useState, useEffect, useContext } from 'react';
 import projectContext from '../../../context/project/projectContext';
 import './_task.scss';
 
-const Task = ({ id,title, description, spent, start_date, status, assigned, priority, project_id, due_date }) => {
+const Task = ({ id, task_id, title, description, spent, start_date, status, assigned, priority, project_id, due_date }) => {
   const context = useContext(projectContext);
   const { deleteTask, updateTask } = context;
-
+  
   const onClickRemoveTask = () => {
     deleteTask(id);
   };
+  
 
   const [selectedStatus, setSelectedStatus] = useState(status);
 
   const handleStatusChange = (e) => {
     const newStatus = e.target.value;
     setSelectedStatus(newStatus);
-    updateTask(id,title, description, spent, start_date, newStatus, assigned, priority, project_id, due_date);
-    console.log(newStatus)
+    updateTask(task_id,title, description, spent, start_date, newStatus, assigned, priority, project_id, due_date);
+    
   };
 
   return (
