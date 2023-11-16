@@ -19,8 +19,7 @@ app.use("/api/task", cors(), require("./src/routes/tasks"));
 
 const Task = require("./src/models/Task");
 const Project = require("./src/models/Project");
-const ProjectHistory = require("./src/models/ProjectHistory")
-const schedule = require('node-schedule');
+const ProjectHistory = require("./src/models/ProjectHistory");
 
 
 
