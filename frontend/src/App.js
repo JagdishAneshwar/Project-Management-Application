@@ -1,6 +1,6 @@
 
 import './_App.scss';
-import { HashRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 import Register from './pages/register/Register';
 import Login from './pages/login/Login';
 import ProjectState from './context/project/ProjectState';

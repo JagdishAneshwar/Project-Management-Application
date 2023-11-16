@@ -16,6 +16,9 @@ app.use("/api/auth", cors(), require("./src/routes/auth"));
 app.use("/api/employee", cors(), require("./src/routes/employee"));
 app.use("/api/project", cors(), require("./src/routes/project"));
 app.use("/api/task", cors(), require("./src/routes/tasks"));
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
+});
 
 const Task = require("./src/models/Task");
 const Project = require("./src/models/Project");
