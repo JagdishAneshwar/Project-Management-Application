@@ -1,6 +1,6 @@
 
 import './_App.scss';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import Register from './pages/register/Register';
 import Login from './pages/login/Login';
 import ProjectState from './context/project/ProjectState';
@@ -11,7 +11,7 @@ function App() {
   return (
     <>
     <ProjectState>
-          <Router>
+          <HashRouter>
             <Routes>
               <Route exact path="/" element={<Register />} />
               <Route exact path="/register" element={<Register />} />
@@ -19,7 +19,7 @@ function App() {
               <Route exact path="/dashboard" element={<Home />} />
               <Route exact path="/project" element={<Project />} />
             </Routes>
-          </Router>
+          </HashRouter>
     </ProjectState>
     </>
   );
