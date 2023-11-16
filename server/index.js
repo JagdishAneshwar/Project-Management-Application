@@ -1,12 +1,16 @@
+const history = require('connect-history-api-fallback');
 const connToMongo = require("./conn");
 const { port } = require("./config");
 const express = require("express");
 var cors = require("cors");
 const app = express();
-connToMongo();
+await history();
+await connToMongo();
+
 
 // to use request.body
 app.use(express.json());
+app.use(express.static('public')); 
 
 //Available routes
 app.use("/api/auth", cors(), require("./src/routes/auth"));
@@ -80,7 +84,7 @@ const cron = require("node-cron");
 
 cron.schedule("0 0 * * * *", saveProjectProgress);
 
-app.listen(process.env.PORT || port, () => {
+app.listen(process.env.PORT || port, async () => {
   console.log(`Example app listening on port http://localhost:${port}`);
 });
 
