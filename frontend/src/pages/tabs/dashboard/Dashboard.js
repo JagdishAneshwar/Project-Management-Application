@@ -78,37 +78,46 @@ const project_budget_risk_length = project_budget_risk.length;
 
   
   // total tasks
-  const task_len = tasks.length;
-
-  // completed Tasks
-  const task_complete = tasks.filter((task) => {
-    return (
-      task.status === "complete"
-    );
-  });
-  const complete_length = task_complete.length;
-
-
-  const incomplete_length = task_len-complete_length;
-
-
-  // due date coming in next 2 days
-  var targetDate = new Date();
-  targetDate.setDate(targetDate.getDate() + 2);
-  var dd = targetDate.getDate();
-  var mm = targetDate.getMonth() + 1; // 0 is January, so we must add 1
-  var yyyy = targetDate.getFullYear();
-  var dateString = yyyy + "-" + mm + "-" + ("0"+dd).slice(-2);
+  const projects_tasks = projects.reduce((accumulator, project) => {
+    const tasksForProject = tasks.filter((task) => task.project_id === project._id);
+    return accumulator.concat(tasksForProject);
+  }, []);
+  
   
 
-  const task_upcoming = tasks.filter((task) => {
-    return (
-      task.due_date === dateString
-    );
-  });
 
-  const upcoming_length = task_upcoming.length;
+  const task_len = projects_tasks.length;
 
+    // completed Tasks
+    const task_complete = projects_tasks.filter((task) => {
+      return (
+        task.status === "complete" 
+      );
+    });
+    const complete_length = task_complete.length;
+  
+  
+    const incomplete_length = task_len-complete_length;
+  
+    // due date coming in next 2 days
+    var targetDate = new Date();
+    targetDate.setDate(targetDate.getDate() + 2);
+    var dd = targetDate.getDate();
+    var mm = targetDate.getMonth() + 1; // 0 is January, so we must add 1
+    var yyyy = targetDate.getFullYear();
+    var dateString = yyyy + "-" + mm + "-" + ("0"+dd).slice(-2);
+    
+  
+    const task_upcoming = projects_tasks.filter((task) => {
+      return (
+        task.due_date === dateString
+      );
+    });
+  
+    const upcoming_length = task_upcoming.length;
+  
+
+ 
   return (
     <div className="dashboard">
       <h4 className="dashboard-title">Dashboard</h4>
