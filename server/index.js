@@ -4,12 +4,11 @@ const { port } = require("./config");
 const express = require("express");
 var cors = require("cors");
 const app = express();
-await history();
-await connToMongo();
-
+connToMongo();
 
 // to use request.body
 app.use(express.json());
+app.use(history());
 app.use(express.static('public')); 
 
 //Available routes
@@ -84,7 +83,7 @@ const cron = require("node-cron");
 
 cron.schedule("0 0 * * * *", saveProjectProgress);
 
-app.listen(process.env.PORT || port, async () => {
+app.listen(process.env.PORT || port, () => {
   console.log(`Example app listening on port http://localhost:${port}`);
 });
 
