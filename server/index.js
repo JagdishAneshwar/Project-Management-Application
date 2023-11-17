@@ -1,4 +1,3 @@
-const history = require('connect-history-api-fallback');
 const connToMongo = require("./conn");
 const { port } = require("./config");
 const express = require("express");
@@ -8,9 +7,7 @@ connToMongo();
 
 // to use request.body
 app.use(express.json());
-app.use(history());
-app.use(express.static('public')); 
-app.use(cors({ origin: 'https://pmwa.thejagdish.com' }));
+
 
 //Available routes
 app.use("/api/auth", cors(), require("./src/routes/auth"));
