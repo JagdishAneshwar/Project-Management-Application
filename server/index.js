@@ -10,6 +10,7 @@ connToMongo();
 app.use(express.json());
 app.use(history());
 app.use(express.static('public')); 
+app.use(cors({ origin: 'https://pmwa.thejagdish.com' }));
 
 //Available routes
 app.use("/api/auth", cors(), require("./src/routes/auth"));
