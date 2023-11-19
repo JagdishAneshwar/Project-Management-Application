@@ -12,7 +12,7 @@ const ProjectOverview = ({
   start_date, 
   due_date, 
   priority, 
-  client, 
+  client,   
   tasks,
   members, 
   img}) => {

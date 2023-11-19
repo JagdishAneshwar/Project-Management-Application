@@ -32,3 +32,9 @@
 
 
 
+@media (max-width: 550px){
+    .card-wrapper{
+        background-color: $tertiary;
+        width: 30%;
+        height: 60px !important;}
+}

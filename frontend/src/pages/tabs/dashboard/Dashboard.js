@@ -15,6 +15,8 @@ const Dashboard = () => {
     getProject()
   },[]);
 
+  const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+  const doughnutPosition = viewportWidth < 1000 ? 'bottom' : 'right';
 
   // --------------------------- project info
 
@@ -138,11 +140,11 @@ const project_budget_risk_length = project_budget_risk.length;
           value={project_overdue_length}
         />
       </div>
-      <div className="project-progress d-flex flex-row justify-content-around">
+      <div className="project-progress justify-content-around">
       <div className="doughnut-wrap">
           <DrawDoughnut
             title="Project Progress"
-            position="right"
+            position={doughnutPosition}
             align="center"
             label={["Overdue","Ongoing Projects", "Completed"]}
             values={[project_overdue_length, project_progress_length, project_complete_length]}
@@ -153,7 +155,7 @@ const project_budget_risk_length = project_budget_risk.length;
         <div className="doughnut-wrap">
           <DrawDoughnut
             title="Task Progress"
-            position="right"
+            position={doughnutPosition}
             align="center"
             label={["Completed","Incomplete"]}
             values={[complete_length,incomplete_length]}

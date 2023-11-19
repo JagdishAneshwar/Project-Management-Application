@@ -1,61 +1,46 @@
 @use "../../variables" as *;
 
-.home{
-    width: 100vw;
-    height: 100vh;
-    position: relative;
-    font-size: $heading3;
-    .vertical-nav{
-        height: 100vh;
-        width: 200px;
+.home {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  font-size: $heading3;
 
-        .profile{
-            width: 100%;
-            height: 220px;
-            margin-bottom: 30px;
-            padding: 26px;
-            padding-top: 14px;
-        }
+  .navbar {
+    min-height: 50px;
+    background: #000;
+    color: white !important;
+    padding: 0;
+    text-align: center;
 
-        .parent-nav{
-            width: 100vw;
-            height: 100vh;
-            color: black;
-            .nav{
-                background-color: $secondary;
-                height: 100vh;
-                width: 17vw;
-                position: fixed;
-                .navbtn{
-                    background-color: $secondary;
-                    color: $light;
-                    border: 0;
-                    border-radius: 0;
-                    text-transform: capitalize;
-                    font-weight: 400;
-                    padding: 1rem;
-                    text-align: center;
-                    &:hover{
-                        background-color: $light;
-                        color: $tertiary;
-                    }
-                    &:active {
-                        background-color: $light;
-                        color: $tertiary;
-                    }
-                    &:focus {
-                        background-color: $light;
-                        color: $tertiary;
-                    }
-                    
-                }
-            }
-            .tab-content{
-                width: 83vw;
-                height: 100%;
-                margin-left: 18vw;
-            }
-        }
-
+    .nav{
+        height: 50px;
+        width: 100%;
     }
+    .nav-item{
+        width: 33.33%;
+    }
+    .nav-link {
+      text-decoration: none;
+      margin: 0;
+      padding: 0;
+      color: white;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      &:hover {
+        background: white;
+        color: black;
+      }
+    }
+
+    ul {
+        width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 0;
+    }
+  }
 }

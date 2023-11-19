@@ -8,8 +8,8 @@ const ProjectState = (props) => {
   const [projects, setproject] = useState(notesInitial);
   const [projecthistory, setprojecthistory] = useState(notesInitial);
   const [tasks, settask] = useState(notesInitial2);
-  const host = "https://project-management-application-ch9v.onrender.com";
-  // const host = "http://localhost:5000"
+  // const host = "https://project-management-application-ch9v.onrender.com";
+  const host = "http://localhost:5000"
 
   const getProject = async () => {
     // API calls
@@ -19,7 +19,7 @@ const ProjectState = (props) => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          // 'Access-Control-Allow-Origin':'*',
+          'Access-Control-Allow-Origin':'*',
           "auth-token": localStorage.getItem("token"),
         },
       }
