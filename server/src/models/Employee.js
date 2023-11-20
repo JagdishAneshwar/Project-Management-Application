@@ -6,7 +6,11 @@ const employeeSchema = new Schema({
     type: String,
     required: true,
   },
-  age: {
+  role: {
+    type: String,
+    required: true,
+  },
+  birthdate: {
     type: Number,
     required: true,
   },
@@ -30,10 +34,6 @@ const employeeSchema = new Schema({
     type: String,
     required: true,
     unique: true,
-  },
-  password: {
-    type: String,
-    required: true,
   },
   start_date: {
     type: Date,

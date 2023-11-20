@@ -48,10 +48,6 @@ const saveProjectProgress = async () => {
       // Calculate earned value based on your logic
       const earnedValue = (completedTasksLength / totalTasks) * 100; // Adjust as needed
 
-      // Normalize earnedValue and sumSpent between 0 and 1
-      const normalizedEarnedValue = normalizeValue(earnedValue, 100); // Assuming 100 is the maximum possible value
-      const normalizedSumSpent = normalizeValue(sumSpent, project.budget);
-
       const currentDate = new Date();
 
       // Create a new ProjectProgress record
@@ -59,8 +55,8 @@ const saveProjectProgress = async () => {
         project_id: project._id,
         completed_tasks: completedTasksLength,
         total_tasks: totalTasks,
-        earned_value: normalizedEarnedValue,
-        spent: normalizedSumSpent,
+        earned_value: earnedValue,
+        spent: sumSpent,
         date: currentDate.getDate(),
       });
 

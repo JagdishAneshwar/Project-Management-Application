@@ -17,7 +17,6 @@ const ProjectOverview = ({
   members, 
   img}) => {
 
-
   const context = useContext(projectContext);
   const navigate = useNavigate();
   const { deleteProject, toComponentB } = context;
@@ -39,11 +38,11 @@ const ProjectOverview = ({
     due_date, 
     priority, 
     client, 
-    tasklist: tasks,
+    tasks,
     members, 
     img}, navigate);}}                 
     >
-      <button type="button" class="btn-close btn-close-danger" onClick={onClickRemoveProject} data-bs-dismiss="modal" aria-label="Close"></button>
+      
     <div class="project-overview">
       {/* <img src={require("../../../res/image/img3.jpg")}
       onClick={() => { toComponentB({  id,  title, 
@@ -58,11 +57,13 @@ const ProjectOverview = ({
     members, 
     img}, navigate);}} 
       class="card-img project-card-img " alt="..."/> */}
-      <div class="card-body" >
-        <h5 class="card-title">{title}</h5>
-        <p class="card-text">{description}</p>
+      <div class="card-body project-overview-body" >
+        <h5 class="card-title project-overview-title">{title}</h5><hr/>
+        <p class="card-text project-overview-description">{description}</p>
+        <p className='project-overview-priority'>Priority: <b>{priority}</b></p>
+        <button type="button" class="btn-danger w-100 project-overview-remove" onClick={onClickRemoveProject} data-bs-dismiss="modal" aria-label="Close">Remove</button>
       </div>
-      <p className='p-3'>Priority: {priority}</p>
+      
     </div>
   </div>
   )

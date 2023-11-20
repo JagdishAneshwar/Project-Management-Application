@@ -121,10 +121,10 @@ const ProjectState = (props) => {
   };
 
     // Delete task function
-    const deleteTask = async (_id) => {
+    const deleteTask = async (id) => {
       // API calls
       
-      const response = await fetch(`${host}/api/task/removeTask/${_id}`, {
+      const response = await fetch(`${host}/api/task/removeTask/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -137,7 +137,7 @@ const ProjectState = (props) => {
       const json = await response.json();
       
       const newTasks = tasks.filter((task) => {
-        return task._id !== _id;
+        return task._id !== id;
       });
       settask(newTasks);
     };
@@ -265,33 +265,13 @@ const ProjectState = (props) => {
     settask(newTasks);
   };
   
-
-  const toComponentB = ({  _id,  title, 
-    description,
-    budget,
-    spent, 
-    start_date, 
-    due_date, 
-    priority, 
-    client, 
-    tasklist: tasks,
-    members, 
-    img}, navigate) => {
-    
+  const toComponentB = ({ _id, title, description, budget, spent, start_date, due_date, priority, client, tasks, members, img }, navigate) => {
+    console.log("component", { _id, title, description, budget, spent, start_date, due_date, priority, client, tasks, members, img });
     navigate(`/project`, {
-      state: {  _id,  title, 
-        description,
-        budget,
-        spent, 
-        start_date, 
-        due_date, 
-        priority, 
-        client, 
-        tasklist: tasks,
-        members, 
-        img},
+      state: { _id, title, description, budget, spent, start_date, due_date, priority, client, tasks, members, img:"" },
     });
   };
+  
 
   return (
     <projectContext.Provider

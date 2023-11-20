@@ -46,6 +46,7 @@ const UpdateProject = ({ id, title, description, budget, spent, start_date, due_
       project.img
     );
     console.log(project);
+    refClose.current.click(); 
   };
   return (
     <div class="update-project-modal modal fade" tabindex="-1" id="updateproject" aria-labelledby="exampleModalLabel" aria-hidden="true">

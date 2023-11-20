@@ -15,12 +15,12 @@ const Dashboard = () => {
     getProject()
   },[]);
 
+  console.log(projects)
+
   const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
   const doughnutPosition = viewportWidth < 1000 ? 'bottom' : 'right';
 
   // --------------------------- project info
-
-  //  total projects
   const project_len = projects.length;
 
   // Projects that have at least one completed task
@@ -118,8 +118,6 @@ const project_budget_risk_length = project_budget_risk.length;
   
     const upcoming_length = task_upcoming.length;
   
-
- 
   return (
     <div className="dashboard">
       <h4 className="dashboard-title">Dashboard</h4>

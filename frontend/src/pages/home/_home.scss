@@ -5,10 +5,10 @@
   height: 100vh;
   position: relative;
   font-size: $heading3;
-
+  padding: 2%;
   .navbar {
     min-height: 50px;
-    background: #000;
+    background: $tertiary;
     color: white !important;
     padding: 0;
     text-align: center;

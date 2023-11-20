@@ -151,8 +151,8 @@ router.post("/addTask", async (req, res) => {
 router.delete("/removeTask/:id",  async (req, res) => {
     // find the task to be updated and update it
 
+    console.log(req.params.id)
     var task = await Task.findById(req.params.id);
-    console.log(task)
     
     if (!task) {
       return res.status(404).send("Not found");
@@ -161,6 +161,7 @@ router.delete("/removeTask/:id",  async (req, res) => {
     try {
       task = await Task.findByIdAndDelete(req.params.id);
       res.send(task);
+      console.log("Record Successfully deleted")
     } catch (err) {
       console.error(err.message);
       res.json({ error: "internal Server Error", err: err.message });

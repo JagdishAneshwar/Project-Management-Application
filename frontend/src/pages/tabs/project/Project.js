@@ -6,7 +6,7 @@ import DrawLine from '../../../features/graph/line/DrawLine';
 import Task from '../../../features/component/task-card/Task';
 import { Link, useNavigate } from "react-router-dom";
 import UpdateProject from '../../../features/component/update-project/UpdateProject'
-import TaskModel from '../../../features/component/task-model/TaskModel';
+import AddTask from '../../../features/component/task-model/TaskModel';
 import { useLocation } from "react-router-dom";
 import "./_project.scss";
 
@@ -34,15 +34,15 @@ const Project = () => {
 
 
 
-      const data = [ "12","30", "2"]
+
       const context = useContext(projectContext);
-      const { getTasks, tasks, getProjectHistory, projecthistory } = context;
+      const { getTasks, tasks, getProjectHistory, projecthistory, projects } = context;
 
       const projectTasks  = tasks.filter(task => task.project_id === _id);
       const todoTasks  = projectTasks.filter(task => task.status === "todo");
       const progressTasks  = projectTasks.filter(task => task.status === "progress");
       const completeTasks  = projectTasks.filter(task => task.status === "complete");
-
+      const project = projects.filter(project => project._id === _id)[0];
 
       const overdueCalculator = (due_date) =>{
         const currentDate = new Date();  // Current date
@@ -72,9 +72,25 @@ const Project = () => {
 
 
 const dates = projecthistory.map(item => new Date(item.date).toLocaleDateString());
-const earned_value = projecthistory.map(item => item.earned_value);
-const spent_value = projecthistory.map(item => item.spent );
+const earned_value = projecthistory.map(item => parseInt(item.earned_value, 10));
+const spent_value = projecthistory.map(item => parseInt(item.spent, 10));
 
+// Calculate cumulative sum
+const calculateCumulativeSum = (array) => {
+  let sum = 0;
+  return array.map(value => sum += value);
+};
+
+const cumulativeSumEarned = calculateCumulativeSum(earned_value);
+const cumulativeSumSpent = calculateCumulativeSum(spent_value);
+
+const normalizeArray = (array) => {
+  const maxValue = Math.max(...array);
+  return array.map(value => value / maxValue * 100);
+};
+
+const normalizedEarned = normalizeArray(cumulativeSumEarned);
+const normalizedSpent = normalizeArray(cumulativeSumSpent);
 
 
         const names = [
@@ -116,34 +132,36 @@ const spent_value = projecthistory.map(item => item.spent );
     return (
     <div className='project-main' key={_id}>
     <Link to="/dashboard"><h4 className="dashboard-title">Dashboard</h4></Link>
-    <div className='info d-flex flex-row justify-content-around align-content-center p-3 border-bottom border-1' >
+    <div className='info d-flex flex-row justify-content-around align-content-center p-3' >
       <div className="project-profile">
       <Profile />
       </div>
       <div className='title-description'>
-      <h3 className='title'>{title}</h3>
-      <div className='description'>{description}</div>
+      <h3 className='title'>{project.title}</h3>
+      <div className='description'>{project.description}</div>
       </div>
     </div>
-    <h4 className='summary-title title'>Summary</h4>
+    <h4 className='summary-title title'>Summary</h4><hr/>
 
-    <div className='summary border-bottom border-1 mb-3'>
+    <div className='summary mb-3'>
       <div className='summary-wrap d-flex flex-row  justify-content-between'>
         <div className='budget-info'>
-        <div className='budget'>Budget: {budget}</div>
-        <div className='spent'>Spent: {spent}</div>
+        <div className='budget'>Budget: {project.budget}</div>
+        <div className='spent'>Spent: {project.spent}</div>
         </div>
         <div className='date-info'>
-        <div className='start-date'>Hours of Work Left: {Math.round(overdueCalculator(due_date))/8-8}</div>
-        <div className='due-date'>Due Date: {due_date}</div>
+        <div className='start-date'>Hours of Work Left: {Math.round(overdueCalculator(project.due_date))/8-8}</div>
+        <div className='due-date'>Due Date: {project.due_date}</div>
         </div>
         <div className='date-info'>
-        <div className='start-date'>Start Date: {start_date}</div>
-        <div className='due-date'>Due Date: {due_date}</div>
+        <div className='start-date'>Start Date: {project.start_date}</div>
+        <div className='due-date'>Due Date: {project.due_date}</div>
         </div>
       </div>
     </div>
-    <div className='visualisation d-flex flex-row'>
+    <hr/>
+    <div className='visualisation'>
+    
       <div className='project-performance'>
       <DrawDoughnut
             title="Project Progress"
@@ -156,16 +174,17 @@ const spent_value = projecthistory.map(item => item.spent );
           />
     </div>
     <div className='project-line-chart'>
-    <DrawLine dates={dates} earned_value={earned_value} spent={spent_value} />
+    <DrawLine dates={dates} earned_value={normalizedEarned} spent={normalizedSpent} />
     </div>
     </div>
-    <TaskModel id={_id} />
-    <UpdateProject id={_id}  title={title} description={description}  budget={budget} spent={spent} start_date={start_date} due_date={due_date} priority={priority} client={client} tasklist={tasklist} members={members} img={img}/>
+    
+    <UpdateProject id={_id}  title={project.title} description={project.description}  budget={project.budget} spent={project.spent} start_date={project.start_date} due_date={project.due_date} priority={project.priority} client={project.client} tasklist={project.tasklist} members={project.members} img={project.img}/>
+    <h4 className='task-overview-title'>Tasks Overview</h4>
     <div className='tasks-overview'>
-      <h4 className='task-overview-title'>Tasks Overview</h4>
-      <div className='tasks-wrapper d-flex flex-row justify-content-around'>
+      <div className='tasks-wrapper justify-content-around'>
         <div className='todo-list'>
-          <h4 className='todo-list-title'>To Do</h4>
+          <h4 className='todo-list-title todo'>To Do</h4>
+          <AddTask id={_id} />
           <div className='todo-wrapper'>
           {todoTasks.map((task, i) => (
             
@@ -176,7 +195,8 @@ const spent_value = projecthistory.map(item => item.spent );
           </div>
         </div>
         <div className='todo-list'>
-          <h4 className='todo-list-title'>On Progress</h4>
+          <h4 className='todo-list-title onprogress'>On Progress</h4>
+          <AddTask id={_id} />
           <div className='todo-wrapper'>
           {progressTasks && Array.isArray(progressTasks) ? (
             progressTasks.map((task, i) => (
@@ -189,7 +209,8 @@ const spent_value = projecthistory.map(item => item.spent );
           </div>
         </div>
         <div className='todo-list'>
-          <h4 className='todo-list-title'>Completd</h4>
+          <h4 className='todo-list-title  completed'>Completed</h4>
+          <AddTask id={_id} />
           <div className='todo-wrapper'>
           {completeTasks && Array.isArray(completeTasks) ? (
             completeTasks.map((task, i) => (

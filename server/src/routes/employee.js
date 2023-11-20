@@ -10,13 +10,13 @@ router.post("/addEmployee", async (req, res) => {
     name, 
     age, 
     gender, 
-    address, 
+    birthdate,
+    role, 
     start_date, 
     end_date, 
     phone_no, 
     salary, 
-    email,
-    password: secPassword,
+    email
   } = req.body;
 
   try {
@@ -24,13 +24,13 @@ router.post("/addEmployee", async (req, res) => {
       name, 
       age, 
       gender, 
-      address, 
+      role, 
+      birthdate,
       start_date, 
       end_date, 
       phone_no, 
       salary, 
-      email,
-      password: secPassword,
+      email
     });
 
     const saveClothe = await employee.save();

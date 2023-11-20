@@ -57,7 +57,7 @@ const TaskModel = ({id}) => {
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header border-0">
-        <h5 class="modal-title">Modal title</h5>
+        <h5 class="modal-title">Add Task</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -163,7 +163,7 @@ const TaskModel = ({id}) => {
     </div>
   </div>
   </div>
-  <button alt="heelo" type="button" ref={ref} class="create-project-button btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add task</button>
+  <button type="button" ref={ref} class="add-task-button btn" data-bs-toggle="modal" data-bs-target="#exampleModal">Add task</button>
 </div>
   )
 }

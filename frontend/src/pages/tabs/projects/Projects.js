@@ -205,7 +205,7 @@ const Projects = () => {
   </div>
    {/* main-part */}
       <h4>Projects</h4>
-     <div class="all-project-lists row row-cols-md-3">
+     <div class="all-project-lists row row-cols-2 row-cols-md-3">
         { projects && projects.map((project) => {
           return (<ProjectOverview 
           _id={project._id}
@@ -225,7 +225,7 @@ const Projects = () => {
       }
       <div class=" project-card-overview">
         <div class="project-overview">
-        <img src={require("../../../res/image/add.png")} alt="heelo" type="button" ref={ref} class="create-project-button" data-bs-toggle="modal" data-bs-target="#exampleModal"/>
+        <div alt="heelo" type="button" ref={ref} class="create-project-button" data-bs-toggle="modal" data-bs-target="#exampleModal"></div>
         </div>
       </div>
       </div>

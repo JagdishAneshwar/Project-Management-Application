@@ -43,8 +43,8 @@ router.put("/updateProject/:id", fetchuser, async (req, res) => {
     due_date,
     priority, 
     client, 
-    tasks,
-    members, 
+    members,
+    tasks, 
     img
   } = req.body;
 
@@ -83,7 +83,7 @@ router.put("/updateProject/:id", fetchuser, async (req, res) => {
     newProject.client = client;
   }
 
-console.log(req.params.id)
+console.log()
   // find the project to be updated and update it
   var project = await Project.findById(req.params.id);
   if (!project) {
