@@ -35,7 +35,7 @@ const Login = () => {
       <div className="row g-0 login-container">
         <img className="login-img" src={require("../../res/image/img3.jpg")} alt="login" />
         <div className="login col-6">
-        <h3 className="login-title">Login</h3>
+        <h3 className="login-title">Login: Beacuse of Free Tier there will be some delay, Refresh Page after while</h3>
         <form className="auth" onSubmit={onClickLogin}>
           <div className="mb-3">
             <label htmlfor="exampleInputEmail1" className="form-label">
